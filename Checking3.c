@@ -73,7 +73,7 @@ bool endLine(int currentDistance, int targetDistance)
 		setMotorReversed(motorC, false);
 		setMotorSpeed(motorB, 50);
 		setMotorSpeed(motorC, 50);
-		return false:
+		return false;
 		//Found that moveMotorTarget not as smooth as setmotorSpeed because it does not need a contain specfic range
 		//moveMotorTarget(motorB, 360, 80);
 		//moveMotorTarget(motorC, 360, 80);
@@ -87,7 +87,7 @@ bool endLine(int currentDistance, int targetDistance)
 		setMotorReversed(motorC, true);
 		setMotorSpeed(motorB, 10);
 		setMotorSpeed(motorC, 10);
-		return false:
+		return false;
 		//Found that moveMotorTarget not as smooth as setmotorSpeed because it does not need a contain specfic range
 		//waitUntilMotorStop(motorB);
 		//waitUntilMotorStop(motorC);
@@ -251,7 +251,7 @@ bool startpos(int currentDistance, int targetDistance)
 	}
 
 	// set to the closer corner
-	setClose();
+	setClose(getGyroDegrees(S2));
 
 	currentDistance = getGyroDegrees(S2);
 	// Let the robot go straight until it hit the end of the wall
@@ -262,7 +262,7 @@ bool startpos(int currentDistance, int targetDistance)
 	}
 
 	// Set the start point
-	setFar();
+	setFar(getGyroDegrees(S2));
 
 	// process competle
 	if (getGyroDegrees(S2) > targetDistance)
