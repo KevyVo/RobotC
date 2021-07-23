@@ -12,9 +12,8 @@ int highest = 10;//black
 float error;
 bool turnDone = false;
 bool noTape = false;
-long degreesGyro;
+//long degreesGyro;
 
-// We are back!
 
 const int targetDistance = 5;
 int currentDistance = 0;
@@ -46,6 +45,31 @@ void scanLine()
 // This will set the to far away it will keep moving the robot and return the if the robot has reach it destination or not
 bool endLine(int currentDistance, int targetDistance)
 {
+	// If to far away from target, move closer
+	if ((currentDistance > targetDistance))
+	{
+		setMotorReversed(motorB, false);
+		setMotorReversed(motorC, false);
+		setMotorSpeed(motorB, 50);
+		setMotorSpeed(motorC, 50);
+		//Found that moveMotorTarget not as smooth as setmotorSpeed because it does not need a contain specfic range
+		//moveMotorTarget(motorB, 360, 80);
+		//moveMotorTarget(motorC, 360, 80);
+	}
+
+	// If pass target then reverse direction, and reading should never go negative.
+	//Just incase of reading error move back is place here
+	if (currentDistance < targetDistance)
+	{
+		setMotorReversed(motorB, true);
+		setMotorReversed(motorC, true);
+		setMotorSpeed(motorB, 10);
+		setMotorSpeed(motorC, 10);
+		//Found that moveMotorTarget not as smooth as setmotorSpeed because it does not need a contain specfic range
+		//waitUntilMotorStop(motorB);
+		//waitUntilMotorStop(motorC);
+	}
+
 	// If the currentDistance is in the range of (20 - 0) then slow down to 10% speed cause it will have more of a control reading
 	// and will slowing come to a stop
 	if (currentDistance < 20 && currentDistance > 0)
@@ -61,60 +85,27 @@ bool endLine(int currentDistance, int targetDistance)
 			waitUntilMotorStop(motorC);
 			return true;
 		}
-		else
-		{
-			return false;
-		}
 	}
-	// If to far away from target, move closer
-	else if ((currentDistance > targetDistance))
-	{
-		setMotorReversed(motorB, false);
-		setMotorReversed(motorC, false);
-		setMotorSpeed(motorB, 50);
-		setMotorSpeed(motorC, 50);
-		return false;
-		//Found that moveMotorTarget not as smooth as setmotorSpeed because it does not need a contain specfic range
-		//moveMotorTarget(motorB, 360, 80);
-		//moveMotorTarget(motorC, 360, 80);
-	}
-
-	// If pass target then reverse direction, and reading should never go negative.
-	//Just incase of reading error move back is place here
-	else if (currentDistance < targetDistance)
-	{
-		setMotorReversed(motorB, true);
-		setMotorReversed(motorC, true);
-		setMotorSpeed(motorB, 10);
-		setMotorSpeed(motorC, 10);
-		return false;
-		//Found that moveMotorTarget not as smooth as setmotorSpeed because it does not need a contain specfic range
-		//waitUntilMotorStop(motorB);
-		//waitUntilMotorStop(motorC);
-	}
-  else
-  {
 	// return false if there it has not hit it current target
 	return false;
-	}
 }
 
 // This function check what side of the robot is far and set the direction
-int setFar(long degreesGyro){
+int setFar(){
 	// Return the base deg back to zero
 	resetGyro(S2);
 
 	// Vars
 	long left;
 	long right;
-	long degreesGyro2 = degreesGyro;
+	long degreesGyro;
 
-	degreesGyro2 = getGyroDegrees(S2);
+	degreesGyro = getGyroDegrees(S2);
 
 	// now checks left for how many deg
-	while (degreesGyro2 <= 0 && degreesGyro2 >=-90)
+	while (degreesGyro <= 0 && degreesGyro >=-90)
 	{
-		degreesGyro2 = getGyroDegrees(S2);
+		degreesGyro = getGyroDegrees(S2);
 		setMotorSpeed(motorC, 10);
 		setMotorSpeed(motorB, -10);
 
@@ -127,11 +118,11 @@ int setFar(long degreesGyro){
 	// records the distance of left into the sensor
 	left = getGyroDegrees(S2);
 
-	degreesGyro2 = getGyroDegrees(S2);
+	degreesGyro = getGyroDegrees(S2);
 	// now check right for how many deg
-	while (degreesGyro2 >= 0 && degreesGyro2 <= 90)
+	while (degreesGyro >= 0 && degreesGyro <= 90)
 	{
-		degreesGyro2 = getGyroDegrees(S2);
+		degreesGyro = getGyroDegrees(S2);
 		setMotorSpeed(motorC, -10);
 		setMotorSpeed(motorB, 10);
 	}
@@ -148,11 +139,11 @@ int setFar(long degreesGyro){
 	//left side is farther away
 	if (left > right)
 	{
-		degreesGyro2 = getGyroDegrees(S2);
+		degreesGyro = getGyroDegrees(S2);
 		// now checks left for how many deg
-		while (degreesGyro2 <= 0 && degreesGyro2 >=-90)
+		while (degreesGyro <= 0 && degreesGyro >=-90)
 		{
-			degreesGyro2 = getGyroDegrees(S2);
+			degreesGyro = getGyroDegrees(S2);
 			setMotorSpeed(motorC, 10);
 			setMotorSpeed(motorB, -10);
 		}
@@ -172,19 +163,20 @@ int setFar(long degreesGyro){
 }
 
 // This function check what side of the robot is far and set the direction
-int setClose(long degreesGyro){
+int setClose(){
 	// Return the base deg back to zero
 	resetGyro(S2);
 
 	// Vars
 	long left;
 	long right;
-	long degreesGyro2 = degreesGyro;
+	long degreesGyro;
 
+	degreesGyro = getGyroDegrees(S2);
 	// now checks left for how many deg
-	while (degreesGyro2 <= 0 && degreesGyro2 >=-90)
+	while (degreesGyro <= 0 && degreesGyro >=-90)
 	{
-		degreesGyro2 = getGyroDegrees(S2);
+		degreesGyro = getGyroDegrees(S2);
 		setMotorSpeed(motorC, 10);
 		setMotorSpeed(motorB, -10);
 
@@ -198,11 +190,11 @@ int setClose(long degreesGyro){
 	left = getGyroDegrees(S2);
 
 
-	degreesGyro2 = getGyroDegrees(S2);
+	degreesGyro = getGyroDegrees(S2);
 	// now check right for how many deg
-	while (degreesGyro2 >= 0 && degreesGyro2 <= 90)
+	while (degreesGyro >= 0 && degreesGyro <= 90)
 	{
-		degreesGyro2 = getGyroDegrees(S2);
+		degreesGyro = getGyroDegrees(S2);
 		setMotorSpeed(motorC, -10);
 		setMotorSpeed(motorB, 10);
 	}
@@ -225,11 +217,10 @@ int setClose(long degreesGyro){
 	//left side is closer
 	if (left < right)
 	{
-		degreesGyro2 = getGyroDegrees(S2);
 		// now checks left for how many deg
-		while (degreesGyro2 <= 0 && degreesGyro2 >=-90)
+		while (degreesGyro <= 0 && degreesGyro >=-90)
 		{
-			degreesGyro2 = getGyroDegrees(S2);
+			degreesGyro = getGyroDegrees(S2);
 			setMotorSpeed(motorC, 10);
 			setMotorSpeed(motorB, -10);
 		}
@@ -238,6 +229,7 @@ int setClose(long degreesGyro){
 		setMotorSpeed(motorB, 0);
 		return -90;
 	}
+
 	return 0;
 }
 
@@ -252,9 +244,8 @@ bool startpos(int currentDistance, int targetDistance)
 	}
 
 	// set to the closer corner
-	setClose(getGyroDegrees(S2));
+	setClose();
 
-	currentDistance = getGyroDegrees(S2);
 	// Let the robot go straight until it hit the end of the wall
 	while (!endLine(currentDistance, targetDistance))
 	{
@@ -263,7 +254,7 @@ bool startpos(int currentDistance, int targetDistance)
 	}
 
 	// Set the start point
-	setFar(getGyroDegrees(S2));
+	setFar();
 
 	// process competle
 	if (getGyroDegrees(S2) > targetDistance)
@@ -370,7 +361,7 @@ task main()
 				delay(1000);
 
 				while(true){
-					//Now turn left
+					//Now turn lefst
 					setMotorSpeed(leftwheel, -12);
 					setMotorSpeed(rightwheel, 12);
 
