@@ -119,11 +119,11 @@ int setFar(long degreesGyro){
 	setMotorSpeed(motorB, 0);
 
 	// records the distance of left into the sensor
-	left = getGyroDegrees(S2);
+	left = getUSDistance(S4);
 
 	degreesGyro2 = getGyroDegrees(S2);
 	// now check right for how many deg
-	while (degreesGyro2 >= 0 && degreesGyro2 <= 90)
+	while (degreesGyro2 >= -90 && degreesGyro2 <= 90)
 	{
 		degreesGyro2 = getGyroDegrees(S2);
 		setMotorSpeed(motorC, -10);
@@ -135,7 +135,7 @@ int setFar(long degreesGyro){
 	setMotorSpeed(motorB, 0);
 
 	// records the distance of the right into the sensor
-	right = getGyroDegrees(S2);
+	right = getUSDistance(S4);
 
 
 
@@ -144,7 +144,7 @@ int setFar(long degreesGyro){
 	{
 		degreesGyro2 = getGyroDegrees(S2);
 		// now checks left for how many deg
-		while (degreesGyro2 <= 0 && degreesGyro2 >=-90)
+		while (degreesGyro2 <= 90 && degreesGyro2 >=-90)
 		{
 			degreesGyro2 = getGyroDegrees(S2);
 			setMotorSpeed(motorC, 10);
@@ -175,7 +175,7 @@ int setClose(long degreesGyro){
 	long right;
 	long degreesGyro2 = degreesGyro;
 
-	// now checks left for how many deg
+	// now checks left for how many deg  -10
 	while (degreesGyro2 <= 0 && degreesGyro2 >=-90)
 	{
 		degreesGyro2 = getGyroDegrees(S2);
@@ -189,12 +189,12 @@ int setClose(long degreesGyro){
 	setMotorSpeed(motorB, 0);
 
 	// records the distance of left into the sensor
-	left = getGyroDegrees(S2);
+	left = getUSDistance(S4);
 
 
-	degreesGyro2 = getGyroDegrees(S2);
-	// now check right for how many deg
-	while (degreesGyro2 >= 0 && degreesGyro2 <= 90)
+	degreesGyro2 = getGyroDegrees(S2); 
+	// now check right for how many deg //-80 >
+	while (degreesGyro2 >= -90 && degreesGyro2 <= 90)
 	{
 		degreesGyro2 = getGyroDegrees(S2);
 		setMotorSpeed(motorC, -10);
@@ -206,7 +206,7 @@ int setClose(long degreesGyro){
 	setMotorSpeed(motorB, 0);
 
 	// records the distance of the right into the sensor
-	right = getGyroDegrees(S2);
+	right = getUSDistance(S4);
 
 
 
@@ -221,7 +221,7 @@ int setClose(long degreesGyro){
 	{
 		degreesGyro2 = getGyroDegrees(S2);
 		// now checks left for how many deg
-		while (degreesGyro2 <= 0 && degreesGyro2 >=-90)
+		while (degreesGyro2 <= 90 && degreesGyro2 >=-90)
 		{
 			degreesGyro2 = getGyroDegrees(S2);
 			setMotorSpeed(motorC, 10);
@@ -232,14 +232,16 @@ int setClose(long degreesGyro){
 		setMotorSpeed(motorB, 0);
 		return -90;
 	}
+	// Both distance is equal
 	return 0;
 }
 
+//This function finds the corner
 bool startpos(int currentDistance, int targetDistance)
 {
 
 	// Let the robot go straight until it hit the end of the wall
-	while (!endLine(currentDistance, targetDistance))
+	while (!endLine(currentDistance, targetDistance)) //!false = true
 	{
 		currentDistance = getUSDistance(S4);
 		displayCenteredBigTextLine(4, "Dist: %3d cm", currentDistance);
