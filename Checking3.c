@@ -241,18 +241,18 @@ bool startpos(int currentDistance, int targetDistance)
 	// Let the robot go straight until it hit the end of the wall
 	while (!endLine(currentDistance, targetDistance))
 	{
-		currentDistance = getGyroDegrees(S2);
+		currentDistance = getUSDistance(S4);
 		displayCenteredBigTextLine(4, "Dist: %3d cm", currentDistance);
 	}
 
 	// set to the closer corner
 	setClose(getGyroDegrees(S2));
 
-	currentDistance = getGyroDegrees(S2);
+	currentDistance = getUSDistance(S4);
 	// Let the robot go straight until it hit the end of the wall
 	while (!endLine(currentDistance, targetDistance))
 	{
-		currentDistance = getGyroDegrees(S2);
+		currentDistance = getUSDistance(S4);
 		displayCenteredBigTextLine(4, "Dist: %3d cm", currentDistance);
 	}
 
@@ -260,7 +260,7 @@ bool startpos(int currentDistance, int targetDistance)
 	setFar(getGyroDegrees(S2));
 
 	// process competle
-	if (getGyroDegrees(S2) > targetDistance)
+	if (getUSDistance(S4) > targetDistance)
 	{
 		return true;
 	}
@@ -274,18 +274,7 @@ task main()
 {
 	resetGyro(S2);
 
-	// Let the robot go straight until it hit the end of the wall
-	while (!endLine(getUSDistance(S4), targetDistance))
-	{
-		//currentDistance = getGyroDegrees(S2);
-		displayCenteredBigTextLine(4, "Dist: %3d cm", getUSDistance(S4));
-
-		sleep(50);
-	}
-
-	while (true){
-		displayCenteredBigTextLine(6, "It has hit the end");
-	}
+	startpos(currentDistance, targetDistance);
 
 	//Main Loop
 	while (true)
