@@ -48,6 +48,30 @@ bool endLine(int currentDistance, int targetDistance)
 {
 	// If the currentDistance is in the range of (20 - 0) then slow down to 10% speed cause it will have more of a control reading
 	// and will slowing come to a stop
+	if ((currentDistance > targetDistance))
+		{
+			setMotorReversed(motorB, false);
+			setMotorReversed(motorC, false);
+			setMotorSpeed(motorB, 50);
+			setMotorSpeed(motorC, 50);
+			//Found that moveMotorTarget not as smooth as setmotorSpeed because it does not need a contain specfic range
+			//moveMotorTarget(motorB, 360, 80);
+			//moveMotorTarget(motorC, 360, 80);
+			return false;
+		}
+	
+	if (currentDistance < targetDistance)
+		{
+			setMotorReversed(motorB, true);
+			setMotorReversed(motorC, true);
+			setMotorSpeed(motorB, 10);
+			setMotorSpeed(motorC, 10);
+			//Found that moveMotorTarget not as smooth as setmotorSpeed because it does not need a contain specfic range
+			//waitUntilMotorStop(motorB);
+			//waitUntilMotorStop(motorC);
+			return false;
+		}
+
 	if (currentDistance < 20 && currentDistance > 0)
 	{
 		setMotorSpeed(motorB, 10);
@@ -65,37 +89,6 @@ bool endLine(int currentDistance, int targetDistance)
 		{
 			return false;
 		}
-	}
-	// If to far away from target, move closer
-	else if ((currentDistance > targetDistance))
-	{
-		setMotorReversed(motorB, false);
-		setMotorReversed(motorC, false);
-		setMotorSpeed(motorB, 50);
-		setMotorSpeed(motorC, 50);
-		return false;
-		//Found that moveMotorTarget not as smooth as setmotorSpeed because it does not need a contain specfic range
-		//moveMotorTarget(motorB, 360, 80);
-		//moveMotorTarget(motorC, 360, 80);
-	}
-
-	// If pass target then reverse direction, and reading should never go negative.
-	//Just incase of reading error move back is place here
-	else if (currentDistance < targetDistance)
-	{
-		setMotorReversed(motorB, true);
-		setMotorReversed(motorC, true);
-		setMotorSpeed(motorB, 10);
-		setMotorSpeed(motorC, 10);
-		return false;
-		//Found that moveMotorTarget not as smooth as setmotorSpeed because it does not need a contain specfic range
-		//waitUntilMotorStop(motorB);
-		//waitUntilMotorStop(motorC);
-	}
-  else
-  {
-	// return false if there it has not hit it current target
-	return false;
 	}
 }
 
@@ -285,10 +278,12 @@ task main()
 	{
 		//currentDistance = getGyroDegrees(S2);
 		displayCenteredBigTextLine(4, "Dist: %3d cm", currentDistance);
+
+		sleep(50);
 	}
 
 	while (true){
-		displayCenteredBigTextLine(4, "It has hit the end");
+		displayCenteredBigTextLine(6, "It has hit the end");
 	}
 
 	//Main Loop
