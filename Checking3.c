@@ -17,7 +17,7 @@ long degreesGyro;
 // We are back!
 
 const int targetDistance = 5;
-int currentDistance = 0;
+//int currentDistance;
 
 
 // This will keep the robot inline with the black tape
@@ -277,7 +277,7 @@ task main()
 	while (!endLine(getGyroDegrees(S2), targetDistance))
 	{
 		//currentDistance = getGyroDegrees(S2);
-		displayCenteredBigTextLine(4, "Dist: %3d cm", currentDistance);
+		displayCenteredBigTextLine(4, "Dist: %3d cm", getGyroDegrees(S2));
 
 		sleep(50);
 	}
