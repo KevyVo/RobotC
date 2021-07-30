@@ -17,7 +17,7 @@ long degreesGyro;
 // We are back!
 
 const int targetDistance = 5;
-//int currentDistance;
+int currentDistance = getUSDistance(S4);
 
 
 // This will keep the robot inline with the black tape
@@ -44,11 +44,11 @@ void scanLine()
 }
 
 // This will set the to far away it will keep moving the robot and return the if the robot has reach it destination or not
-bool endLine(int currentDistance, int targetDistance)
+bool endLine(int currDistance, int targetDistance)
 {
 	// If the currentDistance is in the range of (20 - 0) then slow down to 10% speed cause it will have more of a control reading
 	// and will slowing come to a stop
-	if ((currentDistance > targetDistance))
+	if ((currDistance > targetDistance))
 		{
 			setMotorReversed(motorB, false);
 			setMotorReversed(motorC, false);
@@ -60,7 +60,7 @@ bool endLine(int currentDistance, int targetDistance)
 			return false;
 		}
 	
-	if (currentDistance < targetDistance)
+	if (currDistance < targetDistance)
 		{
 			setMotorReversed(motorB, true);
 			setMotorReversed(motorC, true);
@@ -72,12 +72,12 @@ bool endLine(int currentDistance, int targetDistance)
 			return false;
 		}
 
-	if (currentDistance < 20 && currentDistance > 0)
+	if (currDistance < 20 && currentDistance > 0)
 	{
 		setMotorSpeed(motorB, 10);
 		setMotorSpeed(motorC, 10);
 		// If the currentDistance equals the targetDistance then stop
-		if (currentDistance == targetDistance)
+		if (currDistance == targetDistance)
 		{
 			setMotorSpeed(motorB, 0);
 			setMotorSpeed(motorC, 0);
@@ -90,6 +90,7 @@ bool endLine(int currentDistance, int targetDistance)
 			return false;
 		}
 	}
+	return false;
 }
 
 // This function check what side of the robot is far and set the direction
@@ -274,10 +275,10 @@ task main()
 	resetGyro(S2);
 
 	// Let the robot go straight until it hit the end of the wall
-	while (!endLine(getGyroDegrees(S2), targetDistance))
+	while (!endLine(getUSDistance(S4), targetDistance))
 	{
 		//currentDistance = getGyroDegrees(S2);
-		displayCenteredBigTextLine(4, "Dist: %3d cm", getGyroDegrees(S2));
+		displayCenteredBigTextLine(4, "Dist: %3d cm", getUSDistance(S4));
 
 		sleep(50);
 	}
