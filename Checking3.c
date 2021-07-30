@@ -280,8 +280,16 @@ task main()
 {
 	resetGyro(S2);
 
-	startpos(getGyroDegrees(S2), targetDistance);
+	// Let the robot go straight until it hit the end of the wall
+	while (!endLine(getGyroDegrees(S2), targetDistance))
+	{
+		//currentDistance = getGyroDegrees(S2);
+		displayCenteredBigTextLine(4, "Dist: %3d cm", currentDistance);
+	}
 
+	while (true){
+		displayCenteredBigTextLine(4, "It has hit the end");
+	}
 
 	//Main Loop
 	while (true)
