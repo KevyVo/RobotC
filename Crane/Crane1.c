@@ -6,7 +6,8 @@
 #define Gyro S2
 #define Ultra S1
 
-int threshold = 45;
+int threshold = 50;
+int maxTurn = -80;
 long degGyro;
 
 void grab()
@@ -22,9 +23,49 @@ void drop()
 {
 	setMotorReversed(Grabber, false);
 	setMotorSpeed(Grabber, 8);
-	delay(500);
+	delay(1000);
 	setMotorSpeed(Grabber, 0);
 	delay(1000);
+}
+
+bool withinReach(float distance)
+{
+	if (distance >= 0 && distance <= 5)
+	{
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+}
+
+bool detected(long deg)
+{
+	if (deg <= -20 && deg>= -40)
+	{
+		delay(200);
+		setMotorSpeed(Rotate, 0);
+		delay(500);
+		grab();
+	}
+
+	else if (deg <= -40 && deg >= -60)
+	{
+		delay(400);
+		setMotorSpeed(Rotate, 0);
+		delay(500);
+		grab();
+	}
+
+	else
+	{
+		delay(500);
+		setMotorSpeed(Rotate, 0);
+		delay(500);
+		grab();
+	}
+	return true;
 }
 
 task main()
@@ -32,11 +73,11 @@ task main()
 	while(true){
 		while(true){
 			//Swing the arm back right
-			setMotorSpeed(Rotate, 20);
+			setMotorSpeed(Rotate, 30);
 			//Wait till the touch buttons get pressed
 			if (getTouchValue(Touch) == 1){
-				resetGyro(Gyro);
 				setMotorSpeed(Rotate, 0);
+				resetGyro(Gyro);
 				drop();
 				break;
 			}
@@ -48,20 +89,38 @@ task main()
 
 		while(true)
 		{
+			//&& (degGyro <= -30 && degGyro <= maxTurn)
+			// -35 <= -30 | -35 >= -80
+		  //if (withinReach(getUSDistance(Ultra)) && (degGyro <= -20 && degGyro >= maxTurn))
 			degGyro = getGyroDegrees(Gyro);
-			if (degGyro <= 5 && degGyro >=-45)
+
+			if (withinReach(getUSDistance(Ultra)))
 			{
-				setMotorSpeed(Rotate, -10);
-				if (getGyroDegrees(Gyro) <= -45 && getGyroDegrees(Gyro) >= -50)
+				if (degGyro <= 6 && degGyro >= -20)
 				{
-					setMotorSpeed(Rotate, 0);
+					displayCenteredBigTextLine(3, "There is object in the loading dock");
+				}
+				else
+				{
+					detected(degGyro);
 					break;
 				}
 			}
-			sleep(30)
+
+			if (degGyro >= maxTurn)
+			{
+				setMotorSpeed(Rotate, -10);
+			}
+
+			if (degGyro <= maxTurn)
+			{
+				setMotorSpeed(Rotate, 0);
+				break;
+			}
+			//sleep(30);
 		}
 
-		grab();
+		//grab();
 
 	//displayCenteredBigTextLine(3, getColorAmbient(Color));
 
