@@ -6,11 +6,12 @@
 #define Gyro S2
 #define Ultra S1
 
-// This set the maxuimum range of the robot, the farest the robot can turn is -90. The reason the number is negative is that the bound is going to the left side.
+// This set the maximum range of the robot, the farthest the robot can turn is -90.
+//The reason the number is negative is that the bound is going to the left side.
 int maxTurn = -80;
 long degGyro;
 
-// This function will perform the a subroutine to grab the object infront of it and display the action to the LCD.
+// This function will perform a subroutine to grab the object in front of it and display the action to the LCD.
 void grab()
 {
 	setMotorReversed(Grabber, true);
@@ -21,7 +22,8 @@ void grab()
 	delay(500);
 }
 
-// This function will perform the a subroutine to release the claw and drop the item it was holding. Once release the function will display the claw is in a release state and display it on the LCD.
+// This function will perform a subroutine to release the claw and drop the item it was holding.
+//Once release the function will display the claw is in a release state and display it on the LCD.
 void drop()
 {
 	setMotorReversed(Grabber, false);
@@ -32,7 +34,7 @@ void drop()
 	delay(1000);
 }
 
-// Check if there is a object to grab within the reach of the claw, returns a boolean value.
+// Check if there is an object to grab within the reach of the claw, returns a boolean value.
 bool withinReach(float distance)
 {
 	if (distance >= 0 && distance <= 5)
@@ -45,8 +47,9 @@ bool withinReach(float distance)
 	}
 }
 
-// This functions with help to set the correct delay time to the specfic range.
-// While testing we found between theses three ranges, they all differ on delay time to get the claw to be correctly position in front of the object.
+// This functions will help to set the correct delay time to the spefic range.
+// While testing we found between theses three ranges, they all differ on delay
+//time to get the claw to be correctly position in front of the object.
 bool detected(long deg)
 {
 	if (deg <= -20 && deg>= -40)
@@ -124,18 +127,19 @@ task main()
 				}
 			}
 
-            // This loop will search for a object to pick up, while moving to the left.
+       				// This loop will search for a object to pick up, while moving to the left.
 			while(true)
 			{
 				setMode();
 				degGyro = getGyroDegrees(Gyro);
 
-                // Check if there a object with in reach
+                // Check if there a object within reach
 				if (withinReach(getUSDistance(Ultra)))
 				{
 					setMode();
 
-                    // This will ignore the loading zone area. Even if there is something in the loading zone, all it would do it infinitly pick up the object and drop it.
+                    // This will ignore the loading zone area. Even if there is something in the loading zone,
+										//all it would do it infinitly pick up the object and drop it.
                     // This the reason why we can safetly ignore the loading zone range.
 					if (degGyro <= 6 && degGyro >= -20)
 					{
@@ -155,7 +159,7 @@ task main()
 					setMotorSpeed(Rotate, -10);
 				}
 
-                // When the most left bounds is reach, breakout.
+                // When the most left bounds is reach, break-out.
 				if (degGyro <= maxTurn)
 				{
 					setMotorSpeed(Rotate, 0);
