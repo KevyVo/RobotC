@@ -69,7 +69,7 @@ bool detected(long deg)
 	return true;
 }
 
-void eStop()
+void setMode()
 {
 	//Red = 5 (Stop and exit program)
 	//White = 6 (Pause)
@@ -99,14 +99,14 @@ task main()
 	while(true)
 	{
 			while(true){
-				eStop();
+				setMode();
 				//Swing the arm back right
 				setMotorSpeed(Rotate, 30);
 				//Wait till the touch buttons get pressed
 				if (getTouchValue(Touch) == 1){
 					setMotorSpeed(Rotate, 0);
 					resetGyro(Gyro);
-					eStop();
+					SetMode();
 					drop();
 					break;
 				}
@@ -114,7 +114,7 @@ task main()
 
 			while(true)
 			{
-				eStop();
+				setMode();
 				//&& (degGyro <= -30 && degGyro <= maxTurn)
 				// -35 <= -30 | -35 >= -80
 			  //if (withinReach(getUSDistance(Ultra)) && (degGyro <= -20 && degGyro >= maxTurn))
@@ -122,14 +122,14 @@ task main()
 
 				if (withinReach(getUSDistance(Ultra)))
 				{
-					eStop();
+					setMode();
 					if (degGyro <= 6 && degGyro >= -20)
 					{
 						displayCenteredBigTextLine(3, "Dock is Full");
 					}
 					else
 					{
-						eStop();
+						setMode();
 						detected(degGyro);
 						break;
 					}
