@@ -94,6 +94,7 @@ void setMode()
 		displayCenteredBigTextLine(6, "Green: Go");
 	}
 }
+
 task main()
 {
 	while(true)

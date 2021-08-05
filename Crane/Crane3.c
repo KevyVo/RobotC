@@ -45,7 +45,7 @@ bool withinReach(float distance)
 	}
 }
 
-// This functions with help to set the correct delay time to the specfic range. 
+// This functions with help to set the correct delay time to the specfic range.
 // While testing we found between theses three ranges, they all differ on delay time to get the claw to be correctly position in front of the object.
 bool detected(long deg)
 {
@@ -75,7 +75,7 @@ bool detected(long deg)
 	return true;
 }
 
-// This function control the color modes. If the red is present in front of the color sensor it will terminate the program. 
+// This function control the color modes. If the red is present in front of the color sensor it will terminate the program.
 // If yellow is present it will pause the program and await either a green color to resume the program or terminate if red is shown.
 // It will also display on the LCD what current mode they are in.
 void setMode()
@@ -118,13 +118,13 @@ task main()
 				if (getTouchValue(Touch) == 1){
 					setMotorSpeed(Rotate, 0);
 					resetGyro(Gyro);
-					SetMode();
+					setMode();
 					drop();
 					break;
 				}
 			}
 
-            // This loop will search for a object to pick up, while moving to the left. 
+            // This loop will search for a object to pick up, while moving to the left.
 			while(true)
 			{
 				setMode();
@@ -154,7 +154,7 @@ task main()
 				{
 					setMotorSpeed(Rotate, -10);
 				}
-                
+
                 // When the most left bounds is reach, breakout.
 				if (degGyro <= maxTurn)
 				{
