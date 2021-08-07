@@ -127,7 +127,7 @@ task main()
 				}
 			}
 
-       				// This loop will search for a object to pick up, while moving to the left.
+       		// This loop will search for a object to pick up, while moving to the left.
 			while(true)
 			{
 				setMode();
@@ -139,7 +139,7 @@ task main()
 					setMode();
 
                     // This will ignore the loading zone area. Even if there is something in the loading zone,
-										//all it would do it infinitly pick up the object and drop it.
+					//all it would do it infinitly pick up the object and drop it.
                     // This the reason why we can safetly ignore the loading zone range.
 					if (degGyro <= 6 && degGyro >= -20)
 					{
